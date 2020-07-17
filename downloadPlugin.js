@@ -64,7 +64,18 @@ async function downloadPlugin(url, powercord) {
           // remount failed, might just force restart
         }
       } else {
-        // means there is no manifest
+        powercord.api.notices.sendToast('PDNoManifest', {
+            header: 'This plugin has no manifest, it may not be a plugin', // required
+            content: 'This plugin has no manifest, it may not be a plugin',
+            type: 'info',
+            timeout: 10e3,
+            buttons: [ {
+              text: 'Got It', // required
+              color: 'green',
+              size: 'medium',
+              look: 'outlined',
+            } ],
+          });
       }
     } else {
       // show the error
