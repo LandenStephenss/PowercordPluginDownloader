@@ -4,10 +4,37 @@ const { getModule, React } = require("powercord/webpack");
 const { inject, uninject } = require("powercord/injector");
 const { spawn } = require("child_process");
 const fs = require("fs");
-module.exports = class ViewRaw extends Plugin {
+const { findInReactTree, forceUpdateElement } = require("powercord/util");
+const DownloadButton = require("./Components/DownloadButton");
+const DownloadPlugin = require("./downloadPlugin")
+module.exports = class PowercordPluginDownloader extends Plugin {
   async startPlugin() {
     this.injectContextMenu();
+    this.injectMiniPopover();
+    this.loadStylesheet('styles/style.scss')
   }
+
+  async injectMiniPopover() {
+    const MiniPopover = await getModule(
+      (m) => m.default && m.default.displayName === "MiniPopover"
+    );
+    inject("PluginDownloaderButton", MiniPopover, "default", (args, res) => {
+      const props = findInReactTree(res, (r) => r && r.message && r.setPopout);
+      if (!props || props.channel.id !== "546399060907524106") {
+        return res;
+      }
+
+      res.props.children.unshift(
+        React.createElement(DownloadButton, {
+          message: props.message,
+          main: this,
+        })
+      );
+      return res;
+    });
+    MiniPopover.default.displayName = "MiniPopover";
+  }
+
   async injectContextMenu() {
     const menu = await getModule(["MenuItem"]);
     const mdl = await getModule(
@@ -26,7 +53,7 @@ module.exports = class ViewRaw extends Plugin {
             separate: false,
             id: "PluginDownloaderContextLink",
             label: "Install Plugin",
-            action: () => this.downloadPlugin(target.href),
+            action: () => DownloadPlugin(target.href, powercord),
           })
         );
       }
@@ -77,6 +104,7 @@ module.exports = class ViewRaw extends Plugin {
       }
     });
   }
+
   pluginWillUnload() {
     uninject("PluginDownloader");
   }
