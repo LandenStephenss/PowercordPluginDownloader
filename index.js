@@ -6,12 +6,12 @@ const { spawn } = require("child_process");
 const fs = require("fs");
 const { findInReactTree, forceUpdateElement } = require("powercord/util");
 const DownloadButton = require("./Components/DownloadButton");
-const DownloadPlugin = require("./downloadPlugin")
+const DownloadPlugin = require("./downloadPlugin");
 module.exports = class PowercordPluginDownloader extends Plugin {
   async startPlugin() {
     this.injectContextMenu();
     this.injectMiniPopover();
-    this.loadStylesheet('styles/style.scss')
+    this.loadStylesheet("styles/style.scss");
   }
 
   async injectMiniPopover() {
@@ -37,6 +37,7 @@ module.exports = class PowercordPluginDownloader extends Plugin {
 
   async injectContextMenu() {
     const menu = await getModule(["MenuItem"]);
+    console.log(menu.MenuItem)
     const mdl = await getModule(
       (m) => m.default && m.default.displayName === "MessageContextMenu"
     );
@@ -45,14 +46,19 @@ module.exports = class PowercordPluginDownloader extends Plugin {
         /^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+/
       );
       if (target.tagName.toLowerCase() === "a" && match) {
+        var repoName = target.href.match(/[\w-]+$/)[0];
         res.props.children.splice(
           4,
           0,
           React.createElement(menu.MenuItem, {
-            name: "Install Plugin",
-            separate: false,
+            name: powercord.pluginManager.isInstalled(repoName)
+              ? "Plugin Already Installed"
+              : "Install Plugin",
+            separate: true,
             id: "PluginDownloaderContextLink",
-            label: "Install Plugin",
+            label: powercord.pluginManager.isInstalled(repoName)
+            ? "Plugin Already Installed"
+            : "Install Plugin",
             action: () => DownloadPlugin(target.href, powercord),
           })
         );
@@ -107,5 +113,6 @@ module.exports = class PowercordPluginDownloader extends Plugin {
 
   pluginWillUnload() {
     uninject("PluginDownloader");
+    uninject("PluginDownloaderButton")
   }
 };
