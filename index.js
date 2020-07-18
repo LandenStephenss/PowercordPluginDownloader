@@ -42,6 +42,7 @@ module.exports = class PowercordPluginDownloader extends Plugin {
       (m) => m.default && m.default.displayName === "MessageContextMenu"
     );
     inject("PluginDownloader", mdl, "default", ([{ target }], res) => {
+      if (!target || !target.href || !target.tagName) return res
       var match = target.href.match(
         /^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+/
       );
