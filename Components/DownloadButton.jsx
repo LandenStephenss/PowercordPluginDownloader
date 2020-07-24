@@ -7,10 +7,18 @@ const DownloadPlugin = require("../downloadPlugin");
 const downloadPlugin = require("../downloadPlugin");
 class DownloadButton extends React.Component {
   render() {
+    var GithubLink = this.props.message.content
+      .replace(/(?:\n|<|>)/g, " ")
+      .split(" ")
+      .filter((f) =>
+        f.match(/^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+/)
+      )[0];
+    const repoName = GithubLink.match(/[\w-]+$/)[0];
+    var installed = powercord.pluginManager.isInstalled(repoName);
     if (!this.props.message.content.includes("https://github.com")) {
       return (
         <div
-          className={["PluginDownloaderApply", true && "applied"]
+          className={["PluginDownloaderApply", installed ? "applied" : ""]
             .filter(Boolean)
             .join(" ")}
         >
@@ -25,18 +33,9 @@ class DownloadButton extends React.Component {
         </div>
       );
     } else {
-      var GithubLink = this.props.message.content
-        .replace(/(?:\n|<|>)/g, " ")
-        .split(" ")
-        .filter((f) =>
-          f.match(/^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+/)
-        )[0];
-      console.log(GithubLink);
-      const repoName = GithubLink.match(/[\w-]+$/)[0];
-      var installed = powercord.pluginManager.isInstalled(repoName);
       return (
         <div
-          className={["PluginDownloaderApply", true && "applied"]
+          className={["PluginDownloaderApply", installed && "applied"]
             .filter(Boolean)
             .join(" ")}
         >
