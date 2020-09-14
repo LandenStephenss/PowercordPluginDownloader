@@ -20,7 +20,7 @@ module.exports = class PowercordPluginDownloader extends Plugin {
     );
     inject("PluginDownloaderButton", MiniPopover, "default", (args, res) => {
       const props = findInReactTree(res, (r) => r && r.message && r.setPopout);
-      if (!props || props.channel.id !== "546399060907524106") {
+      if (!props || props.channel.id !== "755005584322854972") {
         return res;
       }
 
