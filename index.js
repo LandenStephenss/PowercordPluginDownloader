@@ -44,10 +44,10 @@ module.exports = class PowercordPluginDownloader extends Plugin {
     inject("PluginDownloader", mdl, "default", ([{ target }], res) => {
       if (!target || !target.href || !target.tagName) return res
       var match = target.href.match(
-        /^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+/
+        /^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+\/?/
       );
       if (target.tagName.toLowerCase() === "a" && match) {
-        var repoName = target.href.match(/[\w-]+$/)[0];
+        var repoName = target.href.match(/([\w-]+)\/?$/)[1];
         res.props.children.splice(
           4,
           0,
