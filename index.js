@@ -29,7 +29,7 @@ module.exports = class PowercordPluginDownloader extends Plugin {
         inject("PowercordPluginDownloaderMessageComponent", MessageComponent, "default", (args, res) => {
             const props = findInReactTree(res, r => r && r.message);
 
-            if (!props || props.channel.id !== "755005584322854972") {
+            if (!props || props.channel?.id !== "755005584322854972") {
                 return res;
             } else {
                 // console.log(props);

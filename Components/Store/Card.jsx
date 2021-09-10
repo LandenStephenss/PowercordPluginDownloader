@@ -1,16 +1,16 @@
 const { React } = require("powercord/webpack");
 const { Clickable, Tooltip, Button, Icons: { Person, Receipt, Tag } } = require("powercord/components");
+const { shell: { openExternal } } = require('electron');
 const DownloadPlugin = require("../../downloadPlugin");
 
 module.exports = class Card extends React.Component {
 
     constructor(props) {
-        console.log(props);
         super(props);
         this.props = props;
         this.message = props.message;
 
-        let [GithubLink, , , repoName] = this.message.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
+        let [, , , repoName] = this.message.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
         this.state = {
             installed: powercord.pluginManager.isInstalled(repoName)
         }
@@ -30,7 +30,9 @@ module.exports = class Card extends React.Component {
         } else {
             return (
                 <div className="PPD-StoreCard">
-                    <Clickable className="PPD-CardTitle"><strong>{repoName}</strong></Clickable>
+                    <Clickable onClick={() => {
+                        openExternal(GithubLink)
+                    }} className="PPD-CardTitle"><strong>{repoName}</strong></Clickable>
 
                     <div className="PPD-Details">
                         <div className="PPD-CardContent">
