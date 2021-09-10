@@ -15,10 +15,6 @@ module.exports = class Card extends React.Component {
             installed: powercord.pluginManager.isInstalled(repoName)
         }
     }
-
-
-
-
     render() {
 
         let [GithubLink, , , repoName] = this.message.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
