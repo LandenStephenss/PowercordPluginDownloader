@@ -1,0 +1,51 @@
+.PPD-StoreCard {
+    width: 92.5%;
+    background-color: var(--background-secondary);
+    border: 2px solid var(--background-secondary-alt);
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 3%;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.PPD-CardTitle {
+    color: var(--text-link);
+
+    &:hover {
+        color: var(--text-link-low-saturation);
+        text-decoration: underline;
+        
+    }
+}
+
+.PPD-StoreCardFooter {
+    display: flex;
+}
+
+.PPD-StoreButtons {
+    margin-left: auto;
+}
+
+.PPD-Details {
+    color: var(--text-normal);
+    margin-top: 15px;
+    .PPD-CardDescription, .PPD-Metadata > div {
+        display: flex;
+        align-items: center;
+
+        > div {
+            display: inline;
+            margin-right: 10px;
+        }
+    }
+
+    .PPD-Metadata {
+        .PPD-Version span + div {
+            margin-left: 5px;
+            color: #faa61a;
+        }
+    }
+
+
+}
