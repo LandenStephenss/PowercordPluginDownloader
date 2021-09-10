@@ -1,5 +1,9 @@
-const { join } = require("path");
-const { spawn } = require("child_process");
+const {
+  join
+} = require("path");
+const {
+  spawn
+} = require("child_process");
 const fs = require("fs");
 async function downloadPlugin(url, powercord) {
   const pluginDir = join(__dirname, "..");
@@ -19,18 +23,18 @@ async function downloadPlugin(url, powercord) {
     data = data.toString();
     console.error(data);
     if (data.includes("already exists")) {
-        powercord.api.notices.sendToast('PDAlreadyInstalled', {
-            header: 'Plugin Already Installed', // required
-            content: 'Plugin Already Installed',
-            type: 'info',
-            timeout: 10e3,
-            buttons: [ {
-              text: 'Got It', // required
-              color: 'green',
-              size: 'medium',
-              look: 'outlined',
-            } ],
-          });
+      powercord.api.notices.sendToast(`PDAlreadyInstalled-${Math.floor(Math.random() * 999)}`, {
+        header: 'Plugin Already Installed', // required
+        content: 'Plugin Already Installed',
+        type: 'info',
+        timeout: 10e3,
+        buttons: [{
+          text: 'Got It', // required
+          color: 'green',
+          size: 'medium',
+          look: 'outlined',
+        }],
+      });
     }
   });
   c.on("exit", async (code) => {
@@ -46,36 +50,34 @@ async function downloadPlugin(url, powercord) {
       if (files.includes("manifest.json")) {
         await powercord.pluginManager.remount(repoName);
         if (powercord.pluginManager.plugins.has(repoName)) {
-          powercord.api.notices.sendToast("PDPluginInstalled", {
+          powercord.api.notices.sendToast(`PDPluginInstalled-${Math.floor(Math.random() * 999)}`, {
             header: "Plugin Installed", // required
             content: "Plugin Installed",
             type: "info",
             timeout: 10e3,
-            buttons: [
-              {
-                text: "Got It", // required
-                color: "green",
-                size: "medium",
-                look: "outlined",
-              },
-            ],
+            buttons: [{
+              text: "Got It", // required
+              color: "green",
+              size: "medium",
+              look: "outlined",
+            }, ],
           });
         } else {
           // remount failed, might just force restart
         }
       } else {
         powercord.api.notices.sendToast('PDNoManifest', {
-            header: 'This plugin has no manifest, it may not be a plugin', // required
-            content: 'This plugin has no manifest, it may not be a plugin',
-            type: 'info',
-            timeout: 10e3,
-            buttons: [ {
-              text: 'Got It', // required
-              color: 'green',
-              size: 'medium',
-              look: 'outlined',
-            } ],
-          });
+          header: 'This plugin has no manifest, it may not be a plugin', // required
+          content: 'This plugin has no manifest, it may not be a plugin',
+          type: 'info',
+          timeout: 10e3,
+          buttons: [{
+            text: 'Got It', // required
+            color: 'green',
+            size: 'medium',
+            look: 'outlined',
+          }],
+        });
       }
     } else {
       // show the error
