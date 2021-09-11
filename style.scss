@@ -27,25 +27,51 @@
 .PPD-StoreCard {
     width: 92.5%;
     background-color: var(--background-secondary);
-    border: 2px solid var(--background-secondary-alt);
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     margin-left: 3%;
     margin-top: 30px;
     margin-bottom: 20px;
-}
-
-.PPD-CardTitle {
-    color: var(--text-link);
-
-    &:hover {
-        color: var(--text-link-low-saturation);
-        text-decoration: underline;
-        
+    .PPD-CardTitle{
+        text-transform: capitalize;
+        color: var(--text-normal);
+        align-items: center;
+        padding-top: 6px;
+        display: flex;
+        .redirect {
+            transition: color 50ms ease;
+            color: var(--text-normal);
+            justify-content: center;
+            display: flex;
+            &:hover {
+                color: var(--text-muted);
+                cursor: pointer;
+                
+            }
+        }
+        span{
+            margin-right: 10px;
+            font-size: 20px;
+        }
+    }
+    .PPD-Details{
+        border-top: solid 1.5px var(--background-modifier-accent);
+        border-bottom: solid 1.5px var(--background-modifier-accent);
+        padding: 20px 0;
+        .PPD-Metadata{
+            margin-top: 20px;
+            display: flex;
+            div:not(:first-child){
+                margin: 0 30px;
+            }
+        }
     }
 }
 
+
+
 .PPD-StoreCardFooter {
+    margin-top: 10px;
     display: flex;
 }
 
