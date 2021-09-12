@@ -57,7 +57,7 @@ module.exports = class Card extends React.Component {
                                     <Tooltip position="top" text="Author">
                                         <Person width={24} height={24} />
                                     </Tooltip>
-                                    <span>{this.message.author.nick}</span>
+                                    <span>{this.message.message.author.nick}</span>
                                 </div>
                                 <div className="PPD-Version">
                                     <Tooltip position="top" text="Version">

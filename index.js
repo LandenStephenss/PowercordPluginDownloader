@@ -57,6 +57,8 @@ module.exports = class PowercordPluginDownloader extends Plugin {
                 });
             }
         })
+
+        MessageComponent.default.displayName === 'Message'
     }
 
     async injectMiniPopover() {
