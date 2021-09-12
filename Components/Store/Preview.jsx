@@ -1,12 +1,9 @@
 const { React } = require('powercord/webpack');
-const { Clickable, Tooltip, Button, Icons: { Person, Receipt, Tag } } = require('powercord/components');
-const { open: openModal } = require('powercord/modal');
 const { Modal } = require('powercord/components/modal');
 
 module.exports = class Card extends React.Component {
 	render() {
 		const {message} = this.props;
-        console.log(message);
         return <Modal className='pluginpreview'>
             <Modal.Header>
                 <h2>Preview</h2>
