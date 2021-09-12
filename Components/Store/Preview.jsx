@@ -4,7 +4,7 @@ const { Modal } = require('powercord/components/modal');
 module.exports = class Card extends React.Component {
 	render() {
 		const {message} = this.props;
-        return <Modal className='pluginpreview'>
+        return <Modal className='PPD-Preview'>
             <Modal.Header>
                 <h2>Preview</h2>
             </Modal.Header>

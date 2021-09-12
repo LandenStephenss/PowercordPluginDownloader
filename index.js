@@ -49,7 +49,7 @@ module.exports = class PowercordPluginDownloader extends Plugin {
             if(this.settings.get("beta", false) === false) return res;
             const props = findInReactTree(res, r => r && r.message);
 
-            if (!props || props.channel?.id !== "755005584322854972") {
+            if (!props || props.message.channel_id !== '755005584322854972') {
                 return res;
             } else {
                 return React.createElement(Card, {
