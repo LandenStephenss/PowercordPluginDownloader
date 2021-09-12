@@ -19,7 +19,7 @@ module.exports = class Card extends React.Component {
     }
     render() {
         this.message.message.embeds = this.message.message.embeds.filter(embed => embed.type === 'image');
-        this.message.message.attachments = this.message.message.attachments.filter(attachment => attachment.content_type.includes('image'))
+        this.message.message.attachments = this.message.message.attachments.filter(attachment => attachment.content_type?.includes?.('image'))
         let [GithubLink, , , repoName] = this.message.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
 
 
