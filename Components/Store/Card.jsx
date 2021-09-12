@@ -1,7 +1,9 @@
 const { React } = require("powercord/webpack");
 const { Clickable, Tooltip, Button, Icons: { Person, Receipt, Tag } } = require("powercord/components");
+const { open: openModal } = require('powercord/modal');
 const { shell: { openExternal } } = require('electron');
 const DownloadPlugin = require("../../downloadPlugin");
+const Preview = require('./Preview')
 
 module.exports = class Card extends React.Component {
 
@@ -16,7 +18,8 @@ module.exports = class Card extends React.Component {
         }
     }
     render() {
-
+        this.message.message.embeds = this.message.message.embeds.filter(embed => embed.type === 'image');
+        this.message.message.attachments = this.message.message.attachments.filter(attachment => attachment.content_type?.includes?.('image'))
         let [GithubLink, , , repoName] = this.message.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
 
 
@@ -37,6 +40,7 @@ module.exports = class Card extends React.Component {
                                 </svg>
                             </Clickable>
                         </Tooltip>
+                        <Button disabled={this.message.message.embeds.length <= 0 && this.message.message.attachments.length <= 0} onClick={() => openModal(() => React.createElement(Preview, {message: this.message.message}))}>Open preview</Button>
                     </h1>
 
                     <div className="PPD-Details">
