@@ -1,14 +1,10 @@
 const { React } = require('powercord/webpack');
 const { SwitchItem } = require('powercord/components/settings');
-
-
 module.exports = class Settings extends React.Component {
     constructor(props) {
         super(props);
         this.props = props;
     }
-
-
     render() {
         return (
             <div>

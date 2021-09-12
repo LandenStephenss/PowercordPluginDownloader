@@ -4,9 +4,7 @@ const { open: openModal } = require('powercord/modal');
 const { shell: { openExternal } } = require('electron');
 const DownloadPlugin = require("../../downloadPlugin");
 const Preview = require('./Preview')
-
 module.exports = class Card extends React.Component {
-
     constructor(props) {
         super(props);
         this.props = props;
@@ -21,9 +19,6 @@ module.exports = class Card extends React.Component {
         this.message.message.embeds = this.message.message.embeds.filter(embed => embed.type === 'image');
         this.message.message.attachments = this.message.message.attachments.filter(attachment => attachment.content_type?.includes?.('image'))
         let [GithubLink, , , repoName] = this.message.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
-
-
-
         if (!GithubLink) {
             return null
         } else {
@@ -57,7 +52,8 @@ module.exports = class Card extends React.Component {
                                     <Tooltip position="top" text="Author">
                                         <Person width={24} height={24} />
                                     </Tooltip>
-                                    <span>{this.message.message.author.nick}</span>
+                                    <span>{this.message.author?.nick || this.message.message.author.username}</span> 
+
                                 </div>
                                 <div className="PPD-Version">
                                     <Tooltip position="top" text="Version">

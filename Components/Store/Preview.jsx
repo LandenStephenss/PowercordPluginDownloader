@@ -1,6 +1,5 @@
 const { React } = require('powercord/webpack');
 const { Modal } = require('powercord/components/modal');
-
 module.exports = class Card extends React.Component {
 	render() {
 		const {message} = this.props;
