@@ -49,6 +49,9 @@
                 
             }
         }
+        button {
+            margin-left: auto;
+        }
         span{
             margin-right: 10px;
             font-size: 20px;
@@ -100,4 +103,13 @@
     }
 
 
+}
+
+.pluginpreview {
+    max-width: 900px;
+    width: min-content;
+    color: var(--text-normal);
+    .content-1LAB8Z {
+        overflow-x: auto !important;
+    }
 }
