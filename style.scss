@@ -24,22 +24,16 @@
   }
 
 
-.PPD-StoreCard {
+.PPD-Card .powercord-product {
+    color: var(--text-normal);
     width: 50%;
-    background-color: var(--deprecated-card-bg);
-    padding: 20px;
-    border: 1px solid var(--background-tertiary);
-    border-radius: 5px;
     margin: 30px 0 20px 3%;
-    .PPD-CardTitle {
+    &-header {
         text-transform: capitalize;
-        color: var(--text-normal);
         align-items: center;
         display: flex;
         .redirect {
             transition: color 50ms ease;
-            color: var(--text-normal);
-            justify-content: center;
             display: flex;
             &:hover {
                 color: var(--text-muted);
@@ -55,52 +49,16 @@
             font-size: 20px;
         }
     }
-    .PPD-Details {
-        border-top: solid 1.5px var(--background-modifier-accent);
-        border-bottom: solid 1.5px var(--background-modifier-accent);
-        padding: 20px 0;
-        .PPD-Metadata {
-            margin-top: 20px;
-            display: flex;
-            div:not(:first-child){
-                margin: 0 25%;
-            }
-        }
-    }
-}
 
-
-
-.PPD-StoreCardFooter {
-    margin-top: 10px;
-    display: flex;
-}
-
-.PPD-StoreButtons {
-    margin-left: auto;
-}
-
-.PPD-Details {
-    color: var(--text-normal);
-    margin-top: 15px;
-    .PPD-CardDescription, .PPD-Metadata > div {
+    .metadata {
         display: flex;
-        align-items: center;
-
+        div:not(:first-child){
+            margin: 0;
+        }
         > div {
-            display: inline;
-            margin-right: 10px;
+            width: 33%;
         }
     }
-
-    .PPD-Metadata {
-        .PPD-Version span + div {
-            margin-left: 5px;
-            color: #faa61a;
-        }
-    }
-
-
 }
 
 .PPD-Preview {
