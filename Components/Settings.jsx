@@ -9,11 +9,12 @@ module.exports = class Settings extends React.Component {
         return (
             <div>
                 <SwitchItem
-                    note='Enable beta features'
+                    note='This feature will completely change #plugin-links and is still being worked on.'
                     value={this.props.getSetting('beta', false)}
                     onChange={() => this.props.toggleSetting('beta')}
                 >
-                    Beta Features
+                    Plugin Cards
+                    <div className='PPD-Beta' >BETA</div>
                 </SwitchItem>
             </div>
         )
