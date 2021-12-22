@@ -6,9 +6,9 @@ const { Clickable } = require("powercord/components");
 const downloadPlugin = require("../downloadPlugin");
 class DownloadButton extends React.Component {
   render() {
-    var [GithubLink, , , repoName] = this.props.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
+    let [GithubLink, , , repoName] = this.props.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
     if (!GithubLink) return <></>;
-    var installed = powercord.pluginManager.isInstalled(repoName);
+    let installed = powercord.pluginManager.isInstalled(repoName);
     if (!this.props.message.content.includes("https://github.com")) {
       return (
         <div

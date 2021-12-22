@@ -85,11 +85,11 @@ module.exports = class PowercordPluginDownloader extends Plugin {
         );
         inject("PPD-ContextMenu", mdl, "default", ([{ target }], res) => {
           if (!target || !target.href || !target.tagName) return res
-          var match = target.href.match(
+          let match = target.href.match(
             /^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+\/?/
           );
           if (target.tagName.toLowerCase() === "a" && match) {
-            var repoName = target.href.match(/([\w-]+)\/?$/)[0];
+            let repoName = target.href.match(/([\w-]+)\/?$/)[0];
             res.props.children.splice(
               4,
               0,

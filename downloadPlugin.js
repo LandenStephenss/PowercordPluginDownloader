@@ -24,12 +24,12 @@ async function downloadPlugin(url, powercord) {
     console.error(data);
     if (data.includes("already exists")) {
       powercord.api.notices.sendToast(`PDAlreadyInstalled-${Math.floor(Math.random() * 999)}`, {
-        header: 'Plugin Already Installed', // required
+        header: 'Plugin Already Installed',
         content: 'Plugin Already Installed',
         type: 'info',
         timeout: 10e3,
         buttons: [{
-          text: 'Got It', // required
+          text: 'Got It',
           color: 'green',
           size: 'medium',
           look: 'outlined',
@@ -44,35 +44,33 @@ async function downloadPlugin(url, powercord) {
         files = fs.readdirSync(join(pluginDir, repoName));
         console.log(files);
       } catch (e) {
-        // handle this error eventually, means the folder is nowhere to be found
         console.error(e);
       }
       if (files.includes("manifest.json")) {
         await powercord.pluginManager.remount(repoName);
         if (powercord.pluginManager.plugins.has(repoName)) {
           powercord.api.notices.sendToast(`PDPluginInstalled-${Math.floor(Math.random() * 999)}`, {
-            header: "Plugin Installed", // required
+            header: "Plugin Installed",
             content: "Plugin Installed",
             type: "info",
             timeout: 10e3,
             buttons: [{
-              text: "Got It", // required
+              text: "Got It",
               color: "green",
               size: "medium",
               look: "outlined",
             }, ],
           });
         } else {
-          // remount failed, might just force restart
         }
       } else {
         powercord.api.notices.sendToast('PDNoManifest', {
-          header: 'This plugin has no manifest, it may not be a plugin', // required
+          header: 'This plugin has no manifest, it may not be a plugin',
           content: 'This plugin has no manifest, it may not be a plugin',
           type: 'info',
           timeout: 10e3,
           buttons: [{
-            text: 'Got It', // required
+            text: 'Got It',
             color: 'green',
             size: 'medium',
             look: 'outlined',
@@ -86,3 +84,8 @@ async function downloadPlugin(url, powercord) {
 }
 
 module.exports = downloadPlugin;
+
+
+
+
+
