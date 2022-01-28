@@ -79,36 +79,62 @@ module.exports = class PowercordPluginDownloader extends Plugin {
     }
 
     async injectContextMenu() {
-        const menu = await getModule(["MenuItem"]);
-        const mdl = await getModule(
-          (m) => m.default && m.default.displayName === "MessageContextMenu"
-        );
-        inject("PPD-ContextMenu", mdl, "default", ([{ target }], res) => {
-          if (!target || !target.href || !target.tagName) return res
-          let match = target.href.match(
-            /^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+\/?/
-          );
-          if (target.tagName.toLowerCase() === "a" && match) {
-            let repoName = target.href.match(/([\w-]+)\/?$/)[0];
-            res.props.children.splice(
-              4,
-              0,
-              React.createElement(menu.MenuItem, {
-                name: powercord.pluginManager.isInstalled(repoName)
-                  ? "Plugin Already Installed"
-                  : "Install Plugin",
-                separate: true,
-                id: "PluginDownloaderContextLink",
-                label: powercord.pluginManager.isInstalled(repoName)
-                ? "Plugin Already Installed"
-                : "Install Plugin",
-                action: () => DownloadPlugin(target.href, powercord),
-              })
-            );
-          }
-          return res;
+        this.lazyPatchContextMenu('MessageContextMenu', async (mdl) => {
+            const menu = await getModule(["MenuItem"]);
+            inject("PPD-ContextMenu", mdl, "default", ([{ target }], res) => {
+                if (!target || !target.href || !target.tagName) return res
+                let match = target.href.match(
+                    /^https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/[\w-]+\/?/
+                );
+                if (target.tagName.toLowerCase() === "a" && match) {
+                    let repoName = target.href.match(/([\w-]+)\/?$/)[0];
+                    res.props.children.splice(
+                        4,
+                        0,
+                        React.createElement(menu.MenuItem, {
+                            name: powercord.pluginManager.isInstalled(repoName)
+                            ? "Plugin Already Installed"
+                            : "Install Plugin",
+                            separate: true,
+                            id: "PluginDownloaderContextLink",
+                            label: powercord.pluginManager.isInstalled(repoName)
+                            ? "Plugin Already Installed"
+                            : "Install Plugin",
+                            action: () => DownloadPlugin(target.href, powercord),
+                        })
+                    );
+                }
+                return res;
+            });
+            mdl.default.displayName = "MessageContextMenu";
         });
-        mdl.default.displayName = "MessageContextMenu";
+    }
+
+    // Credit to SammCheese 
+    async lazyPatchContextMenu(displayName, patch) {
+        const filter = m => m.default && m.default.displayName === displayName
+        const m = getModule(filter, false)
+        if (m) patch(m)
+        else {
+            const module = getModule([ 'openContextMenuLazy' ], false)
+            inject('ppd-lazy-contextmenu', module, 'openContextMenuLazy', args => {
+                const lazyRender = args[1]
+                args[1] = async () => {
+                    const render = await lazyRender(args[0])
+        
+                    return (config) => {
+                    const menu = render(config)
+                    if (menu?.type?.displayName === displayName && patch) {
+                        uninject('st-lazy-contextmenu')
+                        patch(getModule(filter, false))
+                        patch = false
+                    }
+                    return menu
+                    }
+                }
+                return args
+            }, true)
+        }
     }
 
 
