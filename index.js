@@ -3,6 +3,8 @@ const { inject, uninject } = require("powercord/injector");
 const { getModule, React } = require("powercord/webpack");
 const { findInReactTree } = require("powercord/util");
 const Button = require("./Components/Button")
+const { get } = require("powercord/http");
+const download = require("./download.js");
 
 module.exports = class Downloader extends Plugin {
     async startPlugin() {
@@ -10,6 +12,8 @@ module.exports = class Downloader extends Plugin {
         await this.injectPopover();
         this.log("Loading CSS...");
         this.loadStylesheet("style.scss");
+        this.log("Injecting MessageContextMenu...");
+        await this.injectCtxMenu();
     }
 
     // done
@@ -31,33 +35,92 @@ module.exports = class Downloader extends Plugin {
         MiniPopover.default.displayName = "MiniPopover";
     }
 
+    async injectCtxMenu() {
+        await this.lazyPatchCtxMenu('MessageContextMenu', async (mod) => {
+            const menu = await getModule(["MenuItem"]);
+
+            inject("PD-ContextMenu", mod, "default", ([{ target }], res) => {
+                if (!target || !target?.href || !target?.tagName) return res;
+                let match = target.href.match(
+                    /^https?:\/\/(www.)?git(hub).com\/[\w-]+\/[\w-]+\/?/
+                );
+
+
+                if (target.tagName.toLowerCase() === "a" && match) {
+                    let [, username, reponame] = target.href.match(/[\w-]+\//gm);
+
+
+                    get(`https://github.com/${username}/${reponame}/raw/HEAD/powercord_manifest.json`).then((r) => {
+                        if (r?.statusCode === 302) {
+                            res.props.children.splice(
+                                4,
+                                0,
+                                React.createElement(menu.MenuItem, {
+                                    name: `Install Theme`,
+                                    seperate: true,
+                                    id: "DownloaderContextLink",
+                                    label: `Install Theme`,
+                                    action: () => download(target.href, powercord, "theme")
+                                })
+                            )
+                        }
+                    }).catch(null);
+                    get(`https://github.com/${username}/${reponame}/raw/HEAD/manifest.json`).then((r) => {
+                        if (r?.statusCode === 302) {
+                            res.props.children.splice(
+                                4,
+                                0,
+                                React.createElement(menu.MenuItem, {
+                                    name: `Install Plugin`,
+                                    seperate: true,
+                                    id: "DownloaderContextLink",
+                                    label: `Install Plugin`,
+                                    action: () => download(target.href, powercord, "plugin")
+                                })
+                            )
+                        }
+                    }).catch(null);
+                }
+
+                return res;
+            })
+
+            mod.default.displayName = "MessageContextMenu";
+        })
+    }
+
     async lazyPatchCtxMenu(displayName, patch) {
-        const module = getModule(m => m.default && m.default.displayName === displayName);
-        if (module) {
-            patch(module);
-        } else {
-            const module = getModule(["openContextMenuLazy"], false);
-            inject("pd-lazy-ctx-menu", module, "openContextMenuLazy", (args) => {
+        const filter = m => m.default && m.default.displayName === displayName;
+        const m = getModule(filter, false);
+        if (m) patch(m);
+        else {
+            const module = getModule(['openContextMenuLazy'], false);
+            inject('pd-lazy-contextmenu', module, 'openContextMenuLazy', args => {
                 const lazyRender = args[1];
                 args[1] = async () => {
-                    const render = await lazyRender(args[0])
+                    const render = await lazyRender(args[0]);
 
-                    return (config) => {
+                    return config => {
                         const menu = render(config);
                         if (menu?.type?.displayName === displayName && patch) {
-                            uninject("pd-lazy-ctx-menu");
-                            patch(getModule(m => m.default && m.default.displayName === displayName, false));
+                            uninject('pd-lazy-contextmenu');
+                            patch(getModule(filter, false));
                             patch = false;
                         }
-                        return false
-                    }
-                }
+                        return menu;
+                    };
+                };
                 return args;
-            }, true)
+            },
+                true
+            );
         }
     }
 
+
     pluginWillUnload() {
-        uninject("PD-MiniPopover")
+        uninject("PD-MiniPopover");
+        uninject("PD-ContextMenu");
+        uninject('pd-lazy-contextmenu')
     }
 }

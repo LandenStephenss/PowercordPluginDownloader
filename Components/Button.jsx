@@ -5,7 +5,7 @@ const downloadPlugin = require("../download.js");
 module.exports = class Button extends React.Component {
     
     render() {
-        const [GitURL, , , RepoName] = this.props.message.content.match(/https?:\/\/(www.)?git(hub|lab).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
+        const [GitURL, , , RepoName] = this.props.message.content.match(/https?:\/\/(www.)?git(hub).com\/[\w-]+\/([\w-\._]+)\/?/) ?? [];
         if (!GitURL) return <></>;
 
         let installed = this.props.type === "plugin" ?
