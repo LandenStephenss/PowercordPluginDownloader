@@ -1,0 +1,81 @@
+.PluginDownloaderApply {
+    color: var(--text-muted);
+    border-right: 1px var(--background-accent) solid;
+  
+    div {
+      margin: 0 8px;
+      white-space: nowrap;
+      font-size: 14px;
+      padding: 3px 5px;
+      transition: background-color .1s;
+    }
+  
+    &:not(.applied) {
+      color: var(--text-normal);
+  
+      div {
+        cursor: pointer;
+  
+        &:hover {
+          background-color: var(--interactive-muted);
+        }
+      }
+    }
+  }
+
+
+.PPD-Card .powercord-product {
+    color: var(--text-normal);
+    margin: 30px 3% 20px 3%;
+    &-header {
+        text-transform: capitalize;
+        align-items: center;
+        display: flex;
+        .redirect {
+            transition: color 50ms ease;
+            display: flex;
+            &:hover {
+                color: var(--text-muted);
+                cursor: pointer;
+                
+            }
+        }
+        button {
+            margin-left: auto;
+        }
+        span {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+    }
+
+    .metadata {
+        display: flex;
+        div:not(:first-child){
+            margin: 0;
+        }
+        > div {
+            width: 33%;
+        }
+    }
+}
+
+.PPD-Preview {
+    width: min-content;
+    color: var(--text-normal);
+    .content-1LAB8Z {
+        overflow-x: auto !important;
+    }
+}
+
+.PPD-Beta {
+    display: inline-block;
+    background: #f04747;
+    color: #fff;
+    margin-left: 6px;
+    border-radius: 5px;
+    padding: 0 5px;
+    font-size: 10px;
+    line-height: 16px;
+    text-transform: uppercase;
+  }
