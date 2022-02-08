@@ -41,15 +41,11 @@ module.exports = class Downloader extends Plugin {
 
             inject("PD-ContextMenu", mod, "default", ([{ target }], res) => {
                 if (!target || !target?.href || !target?.tagName) return res;
-                let match = target.href.match(
-                    /^https?:\/\/(www.)?git(hub).com\/[\w-]+\/[\w-]+\/?/
-                );
+                const parsedUrl = new URL(target.href);
+                const isGitHub = parsedUrl.hostname.split(".").slice(-2).join(".") === "github.com";
+                const [, username, reponame] = parsedUrl.pathname.split("/"),
 
-
-                if (target.tagName.toLowerCase() === "a" && match) {
-                    let [, username, reponame] = new URL(target.href).pathname.split("/");
-
-
+                if (target.tagName.toLowerCase() === "a" && isGitHub && username && reponame) {
                     get(`https://github.com/${username}/${reponame}/raw/HEAD/powercord_manifest.json`).then((r) => {
                         if (r?.statusCode === 302) {
                             res.props.children.splice(
