@@ -43,7 +43,7 @@ module.exports = class Downloader extends Plugin {
                 if (!target || !target?.href || !target?.tagName) return res;
                 const parsedUrl = new URL(target.href);
                 const isGitHub = parsedUrl.hostname.split(".").slice(-2).join(".") === "github.com";
-                const [, username, reponame] = parsedUrl.pathname.split("/"),
+                const [, username, reponame] = parsedUrl.pathname.split("/");
 
                 if (target.tagName.toLowerCase() === "a" && isGitHub && username && reponame) {
                     get(`https://github.com/${username}/${reponame}/raw/HEAD/powercord_manifest.json`).then((r) => {
