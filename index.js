@@ -47,7 +47,7 @@ module.exports = class Downloader extends Plugin {
 
 
                 if (target.tagName.toLowerCase() === "a" && match) {
-                    let [, username, reponame] = target.href.match(/[\w-]+\//gm);
+                    let [, username, reponame] = new URL(target.href).pathname.split("/");
 
 
                     get(`https://github.com/${username}/${reponame}/raw/HEAD/powercord_manifest.json`).then((r) => {
