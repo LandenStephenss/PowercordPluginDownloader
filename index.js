@@ -14,6 +14,7 @@ module.exports = class Downloader extends Plugin {
         this.loadStylesheet("style.scss");
         this.log("Injecting MessageContextMenu...");
         await this.injectCtxMenu();
+        this.registerCommand();
     }
 
     // done
@@ -113,10 +114,44 @@ module.exports = class Downloader extends Plugin {
         }
     }
 
+    registerCommand() {
+        powercord.api.commands.registerCommand({
+            command: "download",
+            description: "Download a Powercord plugin or theme",
+            usage: "{c} [url]",
+            executor: (args) => {
+                if (!args.length) return;
+                try {
+                    const parsedUrl = new URL(args[0]);
+                    const isGitHub = parsedUrl.hostname.split(".").slice(-2).join(".") === "github.com";
+                    const [, username, reponame] = parsedUrl.pathname.split("/");
+                    if (isGitHub && username && reponame) {
+                        get(`https://github.com/${username}/${reponame}/raw/HEAD/manifest.json`).then((r) => {
+                            if (r?.statusCode === 302) {
+                                download(args[0], powercord, "plugin");
+                            }
+                        }).catch(null);
+                        get(`https://github.com/${username}/${reponame}/raw/HEAD/powercord_manifest.json`).then((r) => {
+                            if (r?.statusCode === 302) {
+                                download(args[0], powercord, "theme");
+                            }
+                        }).catch(null);
+                    } else {
+                        return { result: "Invalid github repository" };
+                    }
+                } catch (e) {
+                    return { result: "Invalid URL" };
+                }
+            }
+        });
+    }
+
+
 
     pluginWillUnload() {
         uninject("PD-MiniPopover");
         uninject("PD-ContextMenu");
-        uninject('pd-lazy-contextmenu')
+        uninject('pd-lazy-contextmenu');
+        powercord.api.commands.unregisterCommand("download");
     }
 }
