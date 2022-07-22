@@ -8,6 +8,19 @@ const download = require("./download.js");
 
 module.exports = class Downloader extends Plugin {
     async startPlugin() {
+        powercord.api.notices.sendAnnouncement('ppd-deprecated-stop-using-this', {
+            color: 'red',
+            message: 'PowercordPluginDownloader has been integrated into powercord itself. You no longer need this plugin.',
+            button: {
+              text: 'Uninstall',
+              onClick: () => {
+                powercord.pluginManager.uninstall('PowercordPluginDownloader');
+              }
+            }
+        });
+
+        return;
+
         this.log("Injecting MiniPopover...")
         await this.injectPopover();
         this.log("Loading CSS...");
@@ -149,6 +162,9 @@ module.exports = class Downloader extends Plugin {
 
 
     pluginWillUnload() {
+        powercord.api.notices.closeAnnouncement('ppd-deprecated-stop-using-this');
+
+        return;
         uninject("PD-MiniPopover");
         uninject("PD-ContextMenu");
         uninject('pd-lazy-contextmenu');
